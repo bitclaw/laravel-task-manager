@@ -39,6 +39,11 @@ DC = docker compose
 EXEC = $(DC) exec app
 APP = $(EXEC) php artisan
 
+.PHONY: env.setup build up up.d stop restart logs logs.app logs.nginx logs.db ps \
+	composer.install composer.update key.generate artisan migrate migrate.fresh \
+	migrate.rollback migrate.status seed tinker routes routes.api cache.clear \
+	test test.filter pint pint.check sh sh.db models reset
+
 env.setup:
 	cp .env.example .env
 
