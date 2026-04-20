@@ -19,9 +19,9 @@ it('associates tasks with projects and orders project tasks by priority', functi
         'priority' => 1,
     ]);
 
-    expect($firstTask->project->is($project))->toBeTrue();
-    expect($project->tasks->modelKeys())->toBe([
-        $firstTask->id,
-        $secondTask->id,
-    ]);
+    expect($firstTask->project->is($project))->toBeTrue()
+        ->and($project->tasks->modelKeys())->toBe([
+            $firstTask->id,
+            $secondTask->id,
+        ]);
 });

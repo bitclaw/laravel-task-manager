@@ -18,9 +18,9 @@ it('reorders tasks within the current project scope', function (): void {
         'task_ids' => [$thirdTask->id, $firstTask->id, $secondTask->id],
     ])->assertOk();
 
-    expect($thirdTask->fresh()->priority)->toBe(1);
-    expect($firstTask->fresh()->priority)->toBe(2);
-    expect($secondTask->fresh()->priority)->toBe(3);
+    expect($thirdTask->fresh()->priority)->toBe(1)
+        ->and($firstTask->fresh()->priority)->toBe(2)
+        ->and($secondTask->fresh()->priority)->toBe(3);
 });
 
 it('rejects reorder requests that do not match the current project scope', function (): void {
