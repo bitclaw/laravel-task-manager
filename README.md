@@ -1,4 +1,4 @@
-# Laravel Task Manager
+# [Laravel Task Manager](https://github.com/bitclaw/laravel-task-manager)
 
 A small Laravel 12 task management application built for local Docker development with MySQL, project-based filtering, and drag-and-drop task reordering.
 
