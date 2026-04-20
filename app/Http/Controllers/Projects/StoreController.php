@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Projects;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProjectRequest;
 use App\Models\Project;
 use Illuminate\Http\RedirectResponse;
 
-class ProjectController extends Controller
+class StoreController extends Controller
 {
-    public function store(StoreProjectRequest $request): RedirectResponse
+    public function __invoke(StoreProjectRequest $request): RedirectResponse
     {
         $project = Project::create($request->validated());
 
