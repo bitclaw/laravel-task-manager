@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'Laravel Task Manager') }}</title>
 
@@ -247,6 +248,15 @@
                                 <span class="inline-flex items-center rounded-full bg-stone-100 px-3 py-1 text-xs font-medium text-stone-700 ring-1 ring-inset ring-stone-200">
                                     Priorities are sequential per project
                                 </span>
+                                @if ($canReorderTasks)
+                                    <span class="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-200">
+                                        Drag tasks to reorder
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center rounded-full bg-stone-100 px-3 py-1 text-xs font-medium text-stone-500 ring-1 ring-inset ring-stone-200">
+                                        Filter to one project to reorder
+                                    </span>
+                                @endif
                             </div>
                         </div>
 
@@ -261,15 +271,38 @@
                                 <p class="mt-2 text-sm text-stone-600">Create your first task from the panel above to populate this list.</p>
                             </div>
                         @else
-                            <ul role="list" class="mt-6 space-y-4">
+                            <ul
+                                role="list"
+                                class="mt-6 space-y-4"
+                                @if ($canReorderTasks)
+                                    data-task-reorder-list
+                                    data-reorder-endpoint="{{ route('tasks.reorder') }}"
+                                    data-project-id="{{ $selectedProjectId ?? '' }}"
+                                @endif
+                            >
                                 @foreach ($tasks as $task)
-                                    <li class="overflow-hidden rounded-3xl bg-white px-5 py-5 shadow-sm ring-1 ring-inset ring-stone-200">
+                                    <li
+                                        class="overflow-hidden rounded-3xl bg-white px-5 py-5 shadow-sm ring-1 ring-inset ring-stone-200 transition @if ($canReorderTasks) cursor-grab @endif"
+                                        @if ($canReorderTasks)
+                                            draggable="true"
+                                            data-task-item
+                                            data-task-id="{{ $task->id }}"
+                                        @endif
+                                    >
                                         <div class="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
                                             <div class="min-w-0 flex-1">
                                                 <div class="flex flex-wrap items-center gap-2">
-                                                    <span class="inline-flex items-center rounded-full bg-amber-500 px-2.5 py-1 text-xs font-semibold text-white">
+                                                    <span
+                                                        class="inline-flex items-center rounded-full bg-amber-500 px-2.5 py-1 text-xs font-semibold text-white"
+                                                        data-priority-badge
+                                                    >
                                                         #{{ $task->priority }}
                                                     </span>
+                                                    @if ($canReorderTasks)
+                                                        <span class="inline-flex items-center rounded-full bg-stone-100 px-2.5 py-1 text-xs font-medium text-stone-600 ring-1 ring-inset ring-stone-200">
+                                                            Drag
+                                                        </span>
+                                                    @endif
 
                                                     @if ($task->project)
                                                         <span class="inline-flex items-center rounded-full bg-stone-100 px-2.5 py-1 text-xs font-medium text-stone-700 ring-1 ring-inset ring-stone-200">

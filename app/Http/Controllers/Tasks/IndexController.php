@@ -33,6 +33,7 @@ class IndexController extends Controller
             'projects' => $projects,
             'tasks' => $tasks,
             'selectedProjectId' => $selectedProjectId,
+            'canReorderTasks' => $tasks->pluck('project_id')->unique()->count() === 1 && $tasks->isNotEmpty(),
         ]);
     }
 }
