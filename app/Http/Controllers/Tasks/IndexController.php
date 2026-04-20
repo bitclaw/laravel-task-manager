@@ -13,7 +13,13 @@ class IndexController extends Controller
 {
     public function __invoke(Request $request): View
     {
-        $selectedProjectId = $request->integer('project');
+        $selectedProject = null;
+
+        if ($request->filled('project')) {
+            $selectedProject = Project::query()->find($request->integer('project'));
+        }
+
+        $selectedProjectId = $selectedProject?->id;
 
         $projects = Project::query()
             ->orderBy('name')
@@ -22,8 +28,8 @@ class IndexController extends Controller
         $tasks = Task::query()
             ->with('project')
             ->when(
-                $selectedProjectId,
-                fn (Builder $query) => $query->where('project_id', $selectedProjectId)
+                $selectedProject,
+                fn (Builder $query) => $query->whereBelongsTo($selectedProject)
             )
             ->orderBy('priority')
             ->orderBy('id')
